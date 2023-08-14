@@ -1,11 +1,11 @@
 {
-  "version": "3.0.0",
+  "name": "damn-vulnerable-defi-solutions-hardhat",
+  "version": "1.0.0",
+  "description": "Damn Vulnerable DeFi CTF solutions using Hardhat",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tinchoabbate/damn-vulnerable-defi.git"
-  },
   "scripts": {
+    "compile": "hardhat clean && hardhat compile",
+    "test": "hardhat test",
     "unstoppable": "yarn hardhat test test/unstoppable/unstoppable.challenge.js",
     "truster": "yarn hardhat test test/truster/truster.challenge.js",
     "naive-receiver": "yarn hardhat test test/naive-receiver/naive-receiver.challenge.js",

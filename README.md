@@ -1,19 +1,35 @@
-![](cover.png)
+# Damn Vulnerable DeFi CTF - Hardhat edition
 
-**A set of challenges to learn offensive security of smart contracts in Ethereum.**
+## What is Damn Vulnerable DeFi
 
-Featuring flash loans, price oracles, governance, NFTs, lending pools, smart contract wallets, timelocks, and more!
+[Damn Vulnerable DeFi](https://www.damnvulnerabledefi.xyz/) is the wargame to learn offensive security of DeFi smart contracts in Ethereum.
 
-## Play
+Featuring flash loans, price oracles, governance, NFTs, DEXs, lending pools, smart contract wallets, timelocks, and more!
 
-Visit [damnvulnerabledefi.xyz](https://damnvulnerabledefi.xyz)
+## Acknowledgements
 
-## Help
+- Created by [@tinchoabbate](https://twitter.com/tinchoabbate)
+- [Damn Vulnerable DeFi Website](https://www.damnvulnerabledefi.xyz/)
+- [Damn Vulnerable DeFi GitHub](https://github.com/tinchoabbate/damn-vulnerable-defi/tree/v3.0.0)
+- [Hardhat](https://github.com/NomicFoundation/hardhat)
+- [Hardhat Docs](https://hardhat.org/docs)
 
-For Q&A and troubleshooting running Damn Vulnerable DeFi, go [here](https://github.com/tinchoabbate/damn-vulnerable-defi/discussions/categories/support-q-a-troubleshooting).
+## How to play
 
-## Disclaimer
+### Install dependencies
 
-All Solidity code, practices and patterns in this repository are DAMN VULNERABLE and for educational purposes only.
+```bash
+yarn
+```
 
-DO NOT USE IN PRODUCTION.
+### Compile contracts
+
+```bash
+yarn compile
+```
+
+### Check solutions
+
+```bash
+yarn test
+```
