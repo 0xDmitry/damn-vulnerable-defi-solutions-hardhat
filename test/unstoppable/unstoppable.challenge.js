@@ -45,8 +45,8 @@ describe('[Challenge] Unstoppable', function () {
 
   it('Execution', async function () {
     // balanceBefore will be equal to 1000000000000000000000001 after this transfer
-    // and convertToShares(totalSupply) will return 999999999999999999999999
-    // thus flashLoan method will always revert with InvalidBalance() error
+    // And convertToShares(totalSupply) will return 999999999999999999999999
+    // Thus flashLoan method will always revert with InvalidBalance() error
     await token.connect(player).transfer(vault.address, 1)
   })
 
