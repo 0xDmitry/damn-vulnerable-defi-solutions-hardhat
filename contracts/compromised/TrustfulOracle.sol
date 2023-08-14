@@ -20,29 +20,33 @@ contract TrustfulOracle is AccessControlEnumerable {
 
     error NotEnoughSources();
 
-    event UpdatedPrice(address indexed source, string indexed symbol, uint256 oldPrice, uint256 newPrice);
+    event UpdatedPrice(
+        address indexed source,
+        string indexed symbol,
+        uint256 oldPrice,
+        uint256 newPrice
+    );
 
     constructor(address[] memory sources, bool enableInitialization) {
-        if (sources.length < MIN_SOURCES)
-            revert NotEnoughSources();
-        for (uint256 i = 0; i < sources.length;) {
+        if (sources.length < MIN_SOURCES) revert NotEnoughSources();
+        for (uint256 i = 0; i < sources.length; ) {
             unchecked {
                 _setupRole(TRUSTED_SOURCE_ROLE, sources[i]);
                 ++i;
             }
         }
-        if (enableInitialization)
-            _setupRole(INITIALIZER_ROLE, msg.sender);
+        if (enableInitialization) _setupRole(INITIALIZER_ROLE, msg.sender);
     }
 
     // A handy utility allowing the deployer to setup initial prices (only once)
-    function setupInitialPrices(address[] calldata sources, string[] calldata symbols, uint256[] calldata prices)
-        external
-        onlyRole(INITIALIZER_ROLE)
-    {
+    function setupInitialPrices(
+        address[] calldata sources,
+        string[] calldata symbols,
+        uint256[] calldata prices
+    ) external onlyRole(INITIALIZER_ROLE) {
         // Only allow one (symbol, price) per source
         require(sources.length == symbols.length && symbols.length == prices.length);
-        for (uint256 i = 0; i < sources.length;) {
+        for (uint256 i = 0; i < sources.length; ) {
             unchecked {
                 _setPrice(sources[i], symbols[i], prices[i]);
                 ++i;
@@ -51,7 +55,10 @@ contract TrustfulOracle is AccessControlEnumerable {
         renounceRole(INITIALIZER_ROLE, msg.sender);
     }
 
-    function postPrice(string calldata symbol, uint256 newPrice) external onlyRole(TRUSTED_SOURCE_ROLE) {
+    function postPrice(
+        string calldata symbol,
+        uint256 newPrice
+    ) external onlyRole(TRUSTED_SOURCE_ROLE) {
         _setPrice(msg.sender, symbol, newPrice);
     }
 
@@ -59,13 +66,17 @@ contract TrustfulOracle is AccessControlEnumerable {
         return _computeMedianPrice(symbol);
     }
 
-    function getAllPricesForSymbol(string memory symbol) public view returns (uint256[] memory prices) {
+    function getAllPricesForSymbol(
+        string memory symbol
+    ) public view returns (uint256[] memory prices) {
         uint256 numberOfSources = getRoleMemberCount(TRUSTED_SOURCE_ROLE);
         prices = new uint256[](numberOfSources);
-        for (uint256 i = 0; i < numberOfSources;) {
+        for (uint256 i = 0; i < numberOfSources; ) {
             address source = getRoleMember(TRUSTED_SOURCE_ROLE, i);
             prices[i] = getPriceBySource(symbol, source);
-            unchecked { ++i; }
+            unchecked {
+                ++i;
+            }
         }
     }
 
