@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "../side-entrance/SideEntranceLenderPool.sol";
+import "solady/src/utils/SafeTransferLib.sol";
+import { SideEntranceLenderPool, IFlashLoanEtherReceiver } from "../side-entrance/SideEntranceLenderPool.sol";
 
 contract SideEntranceAttack is IFlashLoanEtherReceiver {
     function attack(SideEntranceLenderPool pool, uint256 amount) external {
