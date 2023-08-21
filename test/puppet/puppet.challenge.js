@@ -152,7 +152,7 @@ describe('[Challenge] Puppet', function () {
       PLAYER_INITIAL_TOKEN_BALANCE,
       deadline,
     )
-    await PuppetAttackFactory.deploy(
+    await PuppetAttackFactory.connect(player).deploy(
       lendingPool.address,
       uniswapExchange.address,
       token.address,
